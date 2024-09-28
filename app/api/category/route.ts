@@ -1,11 +1,12 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextResponse } from "next/server";
-// import { revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { newCategory } from "@/models/category";
 import { getErrorMessage } from "@/utils/helper";
 
 export async function POST(request: Request) {
   try {
+    // TODO: only admin can add new category
     // const session = await getServerSession(authOptions);
     // if (!session?.user && session?.user.role !== "ADMIN") {
     //   return NextResponse.json({ message: "Unauthenticated" }, { status: 401 });
@@ -18,7 +19,7 @@ export async function POST(request: Request) {
     }
 
     const nCategory = await newCategory(name as string, (slug as string).toLowerCase());
-    // revalidateTag("categories");
+    revalidateTag("categories");
     return NextResponse.json({ message: "success", data: nCategory });
   } catch (error) {
     if (error instanceof SyntaxError) {

@@ -17,6 +17,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -29,6 +31,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import CustomPagination from "@/components/common/pagination/custom-pagination";
+import ConfirmDelete from "@/components/common/confirm-delete";
 
 interface Props {
   categories: Category[];
@@ -59,10 +62,37 @@ export const columns: ColumnDef<Category>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const router = useRouter();
+      const handleDelete = async () => {
+        const id = payment.id;
+        try {
+          const res = await fetch(`/api/category/${id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const json = await res.json();
+          if (res.status === 200) {
+            toast.success("Xóa category thành công");
+            // reload page
+            router.refresh();
+          } else {
+            toast.error(json.message as string);
+          }
+        } catch (error) {
+          toast.error("Error");
+        }
+      };
 
       return (
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => router.push(`/dashboard/products/categories/${payment.id}`)}
+          >
             <SquarePen size={17} />
           </Button>
           <DropdownMenu>
@@ -78,10 +108,7 @@ export const columns: ColumnDef<Category>[] = [
                 Copy ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <Button variant="destructive" className="w-full flex items-center gap-2 justify-start">
-                <Trash2 size={17} />
-                Xóa
-              </Button>
+              <ConfirmDelete handleDelete={handleDelete} />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

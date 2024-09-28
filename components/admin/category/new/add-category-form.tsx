@@ -2,19 +2,50 @@
 import React from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { type Category } from "@prisma/client";
 import CategoryInformation from "./category-information";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/common/back-button";
 
-const AddCategoryForm = () => {
-  const [name, setName] = React.useState("");
-  const [slug, setSlug] = React.useState("");
+interface Props {
+  category: Category | null;
+}
+
+const AddCategoryForm = ({ category }: Props) => {
+  const [name, setName] = React.useState(category?.name ?? "");
+  const [slug, setSlug] = React.useState(category?.slug ?? "");
   const [isLoading, setIsLoading] = React.useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // add new slug
+  const updateCategory = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`/api/category/${category?.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          slug,
+        }),
+      });
+      const json = await res.json();
+      if (res.status === 200) {
+        toast.success("Cập nhật category thành công");
+        // redirect to list category page
+        router.push("/dashboard/products/categories");
+      } else {
+        toast.error(json.message as string);
+      }
+    } catch (error) {
+      toast.error("Error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const addNewCategory = async () => {
     try {
       setIsLoading(true);
       const res = await fetch("/api/category", {
@@ -29,7 +60,7 @@ const AddCategoryForm = () => {
       });
       const json = await res.json();
       if (res.status === 200) {
-        toast.success("Add category successfully");
+        toast.success("Thêm category thành công");
         setName("");
         setSlug("");
         // redirect to list category page
@@ -41,6 +72,16 @@ const AddCategoryForm = () => {
       toast.error("Error");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // add new slug
+    if (category) {
+      await updateCategory();
+    } else {
+      await addNewCategory();
     }
   };
 
@@ -57,7 +98,7 @@ const AddCategoryForm = () => {
             type="submit"
             disabled={isLoading}
           >
-            Tạo Danh mục
+            {category ? "Cập nhật" : "Tạo Danh mục"}
           </Button>
         </div>
         <div className="flex max-md:flex-col flex-no-wrap gap-5 w-full pt-8">
@@ -67,7 +108,7 @@ const AddCategoryForm = () => {
             type="submit"
             disabled={isLoading}
           >
-            Tạo Danh mục
+            {category ? "Cập nhật" : "Tạo Danh mục"}
           </Button>
         </div>
       </form>

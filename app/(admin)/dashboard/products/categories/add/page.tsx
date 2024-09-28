@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const Page = () => {
   return (
     <div>
-      <AddCategoryForm />
+      <AddCategoryForm category={null} />
     </div>
   );
 };
