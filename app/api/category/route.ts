@@ -1,7 +1,24 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextResponse } from "next/server";
-import { newCategory } from "@/models/category";
+import { revalidateTag } from "next/cache";
+import { listCategories, newCategory } from "@/models/category";
 import { getErrorMessage } from "@/utils/helper";
+
+export async function GET() {
+  try {
+    const categories = await listCategories();
+    return NextResponse.json({ message: "success", data: categories });
+  } catch (error) {
+    console.log("Error getting all categories", getErrorMessage(error));
+
+    return NextResponse.json(
+      { message: `Internal Server Error: ${getErrorMessage(error)}` },
+      {
+        status: 500,
+      },
+    );
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -17,6 +34,7 @@ export async function POST(request: Request) {
     }
 
     const nCategory = await newCategory(name as string, (slug as string).toLowerCase());
+    revalidateTag("categories");
     return NextResponse.json({ message: "success", data: nCategory });
   } catch (error) {
     if (error instanceof SyntaxError) {
