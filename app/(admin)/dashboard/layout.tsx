@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import AdminLayout from "@/components/layout/admin-layout";
 import "../../globals.css";
 
@@ -15,6 +16,7 @@ export default function RootLayout({
           </div>
           <main className="mb-20 max-w-screen-lg mx-auto px-2">{children}</main>
         </div>
+        <Toaster position="top-center" reverseOrder={false} toastOptions={{ className: "w-fit" }} />
       </body>
     </html>
   );

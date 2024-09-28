@@ -7,13 +7,14 @@ import { Button } from "@/components/ui/button";
 import { toSlug } from "@/utils/helper";
 
 interface Props {
+  isLoading: boolean;
   name: string;
   slug: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
   setSlug: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const CategoryInformation = ({ name, slug, setName, setSlug }: Props) => {
+const CategoryInformation = ({ isLoading, name, slug, setName, setSlug }: Props) => {
   const handleGenerateSlug = () => {
     setSlug(toSlug(name));
   };
@@ -30,7 +31,7 @@ const CategoryInformation = ({ name, slug, setName, setSlug }: Props) => {
               <Label htmlFor="name" className="md:w-40">
                 Tên
               </Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required disabled={isLoading} />
             </div>
 
             <div className="flex max-md:flex-col justify-between gap-2">
@@ -38,8 +39,15 @@ const CategoryInformation = ({ name, slug, setName, setSlug }: Props) => {
                 Slug
               </Label>
               <div className="flex justify-center gap-2 w-full">
-                <Input id="slug" value={slug} onChange={(e) => setSlug(e.target.value)} className="flex-1" required />
-                <Button variant="secondary" type="button" onClick={handleGenerateSlug}>
+                <Input
+                  id="slug"
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value)}
+                  className="flex-1"
+                  disabled={isLoading}
+                  required
+                />
+                <Button variant="secondary" type="button" onClick={handleGenerateSlug} disabled={isLoading}>
                   Generate
                 </Button>
               </div>
