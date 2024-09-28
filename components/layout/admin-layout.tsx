@@ -23,7 +23,7 @@ const components: { title: string; href: string }[] = [
   },
   {
     title: "Categories",
-    href: "/docs/primitives/alert-dialog",
+    href: "/dashboard/products/categories",
   },
   {
     title: "Tags",

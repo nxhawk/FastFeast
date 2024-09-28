@@ -60,10 +60,10 @@ const AdminMenuDropdown = () => {
                     <Link href={"/dashboard/products"}>Danh sách</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href={"/dashboard/products"}>Categories</Link>
+                    <Link href={"/dashboard/products/categories"}>Categories</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href={"/dashboard/products"}>Tags</Link>
+                    <Link href={"/dashboard/products/tags"}>Tags</Link>
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
