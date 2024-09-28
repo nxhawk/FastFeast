@@ -8,7 +8,11 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -43,12 +47,27 @@ const AdminMenuDropdown = () => {
                 Báo cáo
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href={"/dashboard"} className="flex gap-2 items-center w-full">
-                <Package size="17" />
-                Sản phẩm
-              </Link>
-            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <div className="flex gap-2 items-center w-full">
+                  <Package size="17" />
+                  Sản phẩm
+                </div>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem>
+                    <Link href={"/dashboard/products"}>Danh sách</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href={"/dashboard/products"}>Categories</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href={"/dashboard/products"}>Tags</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
             <DropdownMenuItem>
               <Link href={"/dashboard"} className="flex gap-2 items-center w-full">
                 <UsersRound size="17" />

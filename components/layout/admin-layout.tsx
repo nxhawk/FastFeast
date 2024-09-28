@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 const components: { title: string; href: string }[] = [
   {
     title: "Danh sách",
-    href: "/docs/primitives/alert-dialog",
+    href: "/dashboard/products",
   },
   {
     title: "Categories",
@@ -43,7 +43,12 @@ const AdminLayout = () => {
           <NavItem title="Dashboard" href="/dashboard" pathName={pathName} />
           <NavItem title="Đơn hàng" href="/dashboard/orders" pathName={pathName} />
           <NavItem title="Báo cáo" href="/dashboard/reports" pathName={pathName} />
-          <NavigationMenu className="h-full">
+          <NavigationMenu
+            className={cn(
+              "h-full",
+              pathName.startsWith("/dashboard/products") && "border-b text-indigo-700 border-indigo-700",
+            )}
+          >
             <NavigationMenuList className="h-full">
               <NavigationMenuItem className="h-full">
                 <NavigationMenuTrigger className="h-full">Sản phẩm</NavigationMenuTrigger>

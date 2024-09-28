@@ -9,12 +9,19 @@ interface Props {
 }
 
 const NavItem = ({ href, title, pathName }: Props) => {
+  function checkToggle() {
+    if (href === "/dashboard")
+      return (
+        (pathName === "/dashboard" || pathName === "/dashboard/") && (href === "/dashboard" || href === "/dashboard/")
+      );
+    return pathName.startsWith(href);
+  }
   return (
     <Link
       href={href}
       className={cn(
         "text-sm h-full flex items-center  px-2",
-        pathName.startsWith(href) && "border-b text-indigo-700 border-indigo-700",
+        checkToggle() && "border-b text-indigo-700 border-indigo-700",
       )}
     >
       {title}
