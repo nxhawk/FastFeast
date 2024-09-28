@@ -1,6 +1,8 @@
 import { type Metadata } from "next";
 import React from "react";
+import { unstable_cache } from "next/cache";
 import AddProductForm from "@/components/admin/product/new/add-product-form";
+import { listCategories } from "@/models/category";
 
 export const metadata: Metadata = {
   title: "Thêm sản phẩm - Fast Food Ordering website",
@@ -8,10 +10,19 @@ export const metadata: Metadata = {
   icons: "images/logo.png",
 };
 
-const Page = () => {
+const getCategories = unstable_cache(
+  async () => {
+    return listCategories();
+  },
+  ["categories"],
+  { tags: ["categories"] },
+);
+
+const Page = async () => {
+  const categories = await getCategories();
   return (
     <div>
-      <AddProductForm />
+      <AddProductForm categories={categories} />
     </div>
   );
 };

@@ -6,8 +6,44 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { toSlug } from "@/utils/helper";
 
-const ProductInformation = () => {
+interface Props {
+  isLoading: boolean;
+  title: string;
+  slug: string;
+  description: string;
+  image: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  setSlug: React.Dispatch<React.SetStateAction<string>>;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  setImage: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const ProductInformation = ({
+  isLoading,
+  title,
+  setTitle,
+  slug,
+  setSlug,
+  description,
+  setDescription,
+  image,
+  setImage,
+}: Props) => {
+  function handleChangeImage(changeEvent: React.ChangeEvent<HTMLInputElement>) {
+    if (!changeEvent.target.files) return;
+
+    const file = Array.from(changeEvent.target.files)[0];
+    const reader = new FileReader();
+
+    reader.onload = function (onLoadEvent) {
+      setImage(onLoadEvent.target?.result as string);
+    };
+
+    reader.readAsDataURL(file);
+  }
+
   return (
     <div className="">
       <Card>
@@ -21,12 +57,12 @@ const ProductInformation = () => {
                 Image
               </Label>
               <div className="flex flex-col gap-3 w-full">
-                <Avatar className="w-24 h-24">
-                  <AvatarImage src="null" alt="@shadcn" />
+                <Avatar className="w-24 h-24 rounded-none">
+                  <AvatarImage src={image} alt="product image" className="rounded-none" />
                   <AvatarFallback>Avatar</AvatarFallback>
                 </Avatar>
                 <div>
-                  <Input id="image" type="file" />
+                  <Input id="image" type="file" onChange={handleChangeImage} multiple={false} />
                   <p className="mt-2 text-[0.8rem] text-muted-foreground">Vui lòng chọn ảnh</p>
                 </div>
               </div>
@@ -36,7 +72,13 @@ const ProductInformation = () => {
               <Label htmlFor="title" className="md:w-40">
                 Tiêu đề
               </Label>
-              <Input id="title" required />
+              <Input
+                id="title"
+                required
+                disabled={isLoading}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </div>
 
             <div className="flex max-md:flex-col justify-between gap-2">
@@ -44,8 +86,15 @@ const ProductInformation = () => {
                 Slug
               </Label>
               <div className="flex justify-center gap-2 w-full">
-                <Input id="slug" className="flex-1" required />
-                <Button variant="secondary" type="button">
+                <Input
+                  id="slug"
+                  className="flex-1"
+                  required
+                  disabled={isLoading}
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value)}
+                />
+                <Button variant="secondary" type="button" onClick={() => setSlug(toSlug(title))}>
                   Generate
                 </Button>
               </div>
@@ -55,7 +104,13 @@ const ProductInformation = () => {
               <Label htmlFor="description" className="md:w-40">
                 Mô tả
               </Label>
-              <Textarea id="description" className="min-h-[80px]" />
+              <Textarea
+                id="description"
+                className="min-h-[80px]"
+                disabled={isLoading}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </div>
           </div>
         </CardContent>
