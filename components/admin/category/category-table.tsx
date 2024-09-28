@@ -39,7 +39,6 @@ export const columns: ColumnDef<Category>[] = [
     accessorKey: "name",
     header: ({ column }) => {
       return (
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Tên
           <CaretSortIcon className="ml-2 h-4 w-4" />
@@ -75,7 +74,7 @@ export const columns: ColumnDef<Category>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
+              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id + "")}>
                 Copy ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
