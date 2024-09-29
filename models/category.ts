@@ -51,6 +51,13 @@ export async function newCategory(name: string, slug: string) {
 }
 
 export async function deleteCategory(id: string) {
+  // delete category connect product
+  await prisma.categoriesOnProducts.deleteMany({
+    where: {
+      categoryId: id,
+    },
+  });
+
   const deteledCategory = await prisma.category.delete({
     where: {
       id,

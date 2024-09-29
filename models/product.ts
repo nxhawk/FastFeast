@@ -163,3 +163,30 @@ export async function newProduct(
 
   return newProduct;
 }
+
+export async function deleteProduct(id: string) {
+  const product = await getProductById(id);
+  if (!product) return;
+
+  // delete product image
+  try {
+    await deleteImage(product.image?.id || "");
+  } catch (error) {}
+
+  // delete category connect product
+  await prisma.categoriesOnProducts.deleteMany({
+    where: {
+      productId: product.id,
+    },
+  });
+
+  // delete product
+  const deteledProduct = await prisma.product.delete({
+    where: {
+      id,
+    },
+  });
+  revalidatePath("/dashboard/products");
+
+  return deteledProduct;
+}

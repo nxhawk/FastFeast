@@ -40,7 +40,7 @@ interface Props {
 
 export const columns: ColumnDef<Category>[] = [
   {
-    accessorKey: "Tên",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>

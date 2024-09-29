@@ -32,7 +32,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import CustomPagination from "@/components/common/pagination/custom-pagination";
 import ConfirmDelete from "@/components/common/confirm-delete";
-import { type FullProduct } from "@/models/product";
+import { deleteProduct, type FullProduct } from "@/models/product";
 import { formateDate, statusToTitle } from "@/utils/helper";
 import { Badge } from "@/components/ui/badge";
 
@@ -58,7 +58,7 @@ export const columns: ColumnDef<FullProduct>[] = [
     },
   },
   {
-    accessorKey: "Tiêu đề",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -134,10 +134,10 @@ export const columns: ColumnDef<FullProduct>[] = [
       const handleDelete = async () => {
         const id = payment.id;
         try {
-          // await deleteCategory(id);
-          // toast.success("Xóa category thành công");
-          // // reload page
-          // router.refresh();
+          await deleteProduct(id);
+          toast.success("Xóa sản phẩm thành công");
+          // reload page
+          router.refresh();
         } catch (error) {
           toast.error("Error");
         }
