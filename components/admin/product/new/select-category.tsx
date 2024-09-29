@@ -12,12 +12,13 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface Props {
+  isLoading: boolean;
   categories: Category[];
   category: Category[];
   setCategory: React.Dispatch<React.SetStateAction<Category[]>>;
 }
 
-const SelectCategory = ({ categories, category, setCategory }: Props) => {
+const SelectCategory = ({ isLoading, categories, category, setCategory }: Props) => {
   const updateSelectCategory = (cate: Category) => {
     const filterCategory = category.filter((c) => c.id !== cate.id);
     const haveCategory = category.filter((c) => c.id === cate.id).length > 0;
@@ -35,7 +36,12 @@ const SelectCategory = ({ categories, category, setCategory }: Props) => {
       </Label>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" role="combobox" className="flex w-full justify-start flex-wrap h-fit gap-2">
+          <Button
+            variant="outline"
+            role="combobox"
+            className="flex w-full justify-start flex-wrap h-fit gap-2"
+            disabled={isLoading}
+          >
             <div className="flex-1 flex w-full justify-start flex-wrap h-fit gap-2">
               {category.map((cate) => (
                 <div key={cate.id} className="bg-slate-200 font-medium px-2 rounded flex items-center gap-1">

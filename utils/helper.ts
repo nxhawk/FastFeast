@@ -1,6 +1,32 @@
+import { Status } from "@prisma/client";
+import moment from "moment";
+
+export function statusToTitle(status: Status) {
+  type TVariant = "secondary" | "destructive" | "default";
+  if (status === Status.DRAFT)
+    return {
+      title: "Nháp",
+      variant: "secondary" as TVariant,
+    };
+  if (status === Status.PUBLIC)
+    return {
+      title: "Công khai",
+      variant: "default" as TVariant,
+    };
+  if (status === Status.OUTSTOCK)
+    return {
+      title: "Hết hàng",
+      variant: "destructive" as TVariant,
+    };
+}
+
 export function getErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
   return String(error);
+}
+
+export function formateDate(date: string | number | Date | undefined) {
+  return moment(date).format("HH:mm:ss DD/MM/YYYY");
 }
 
 export function convertToVND(money: number) {

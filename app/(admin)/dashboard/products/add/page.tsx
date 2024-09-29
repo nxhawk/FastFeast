@@ -22,7 +22,7 @@ const Page = async () => {
   const categories = await getCategories();
   return (
     <div>
-      <AddProductForm categories={categories} />
+      <AddProductForm categories={categories} product={null} />
     </div>
   );
 };

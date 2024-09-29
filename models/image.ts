@@ -21,10 +21,10 @@ export async function createImage(data: string): Promise<Image> {
   }
 }
 
-export async function deleteAttachment(id: string): Promise<Image> {
+export async function deleteImage(id: string): Promise<Image> {
   const image = await prisma.image.delete({
     where: {
-      id: id,
+      id,
     },
   });
 

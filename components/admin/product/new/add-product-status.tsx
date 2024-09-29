@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Props {
+  isLoading: boolean;
   categories: Category[];
   status: Status;
   category: Category[];
@@ -13,7 +14,7 @@ interface Props {
   setCategory: React.Dispatch<React.SetStateAction<Category[]>>;
 }
 
-const AddProductStatus = ({ categories, status, setStatus, category, setCategory }: Props) => {
+const AddProductStatus = ({ isLoading, categories, status, setStatus, category, setCategory }: Props) => {
   return (
     <div className="w-full md:w-2/6">
       <Card>
@@ -23,7 +24,13 @@ const AddProductStatus = ({ categories, status, setStatus, category, setCategory
               <Label htmlFor="status" className="md:w-40">
                 Tình trạng
               </Label>
-              <Select onValueChange={(e: Status) => setStatus(e)} value={status} defaultValue="nhap" required>
+              <Select
+                onValueChange={(e: Status) => setStatus(e)}
+                value={status}
+                defaultValue="nhap"
+                required
+                disabled={isLoading}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a verified status to display" />
                 </SelectTrigger>
@@ -34,7 +41,12 @@ const AddProductStatus = ({ categories, status, setStatus, category, setCategory
                 </SelectContent>
               </Select>
             </div>
-            <SelectCategory category={category} setCategory={setCategory} categories={categories} />
+            <SelectCategory
+              category={category}
+              setCategory={setCategory}
+              categories={categories}
+              isLoading={isLoading}
+            />
           </div>
         </CardContent>
       </Card>

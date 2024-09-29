@@ -7,22 +7,27 @@ import ProductInformation from "./product-information";
 import AddProductStatus from "./add-product-status";
 import BackButton from "@/components/common/back-button";
 import { Button } from "@/components/ui/button";
-import { newProduct } from "@/models/product";
+import { type FullProduct, newProduct, updateProduct } from "@/models/product";
 
 interface Props {
   categories: Category[];
+  product: FullProduct | null;
 }
 
-const AddProductForm = ({ categories }: Props) => {
+const AddProductForm = ({ categories, product }: Props) => {
   const router = useRouter();
-  const [title, setTitle] = React.useState("");
-  const [slug, setSlug] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [status, setStatus] = React.useState<Status>(Status.DRAFT);
-  const [category, setCategory] = React.useState<Category[]>([]);
+  const [title, setTitle] = React.useState(product?.name ?? "");
+  const [slug, setSlug] = React.useState(product?.slug ?? "");
+  const [description, setDescription] = React.useState(product?.description ?? "");
+  const [status, setStatus] = React.useState<Status>(product?.status ?? Status.DRAFT);
+  const [category, setCategory] = React.useState<Category[]>(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    product?.categories && product?.categories?.length > 0 ? [...product.categories.map((cate) => cate.category)] : [],
+  );
   const [isLoading, setIsLoading] = React.useState(false);
-  const [image, setImage] = React.useState("");
-  const [price, setPrice] = React.useState<number>(0);
+  const [image, setImage] = React.useState(product?.image?.path ?? "");
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const [price, setPrice] = React.useState<number>(product?.price ? product.price : 0);
 
   const addNewProduct = async () => {
     if (!image || image.length <= 0) {
@@ -45,9 +50,37 @@ const AddProductForm = ({ categories }: Props) => {
     }
   };
 
+  const updateOneProduct = async () => {
+    try {
+      setIsLoading(true);
+      await updateProduct(
+        product?.id || "",
+        title,
+        slug,
+        description,
+        status,
+        price,
+        image,
+        product?.image?.id || "",
+        category,
+      );
+      toast.success("Cập nhật sản phẩm thành công");
+      // redirect to list product page
+      router.push("/dashboard/products");
+    } catch (error) {
+      toast.error("Có lỗi xảy ra");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    addNewProduct();
+    if (product) {
+      updateOneProduct();
+    } else {
+      addNewProduct();
+    }
   };
 
   return (
@@ -62,7 +95,7 @@ const AddProductForm = ({ categories }: Props) => {
             className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-indigo-500 hover:to-blue-600 shadow whitespace-nowrap flex items-center gap-1 font-medium max-md:hidden"
             type="submit"
           >
-            Tạo Sản Phẩm
+            {product ? "Cập nhật" : "Tạo Sản Phẩm"}
           </Button>
         </div>
         <div className="flex max-md:flex-col flex-no-wrap gap-5 w-full pt-8 ">
@@ -84,7 +117,7 @@ const AddProductForm = ({ categories }: Props) => {
               className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-indigo-500 hover:to-blue-600 shadow whitespace-nowrap flex items-center gap-1 font-medium w-fit self-end mt-10 md:hidden"
               type="submit"
             >
-              Tạo Sản Phẩm
+              {product ? "Cập nhật" : "Tạo Sản Phẩm"}
             </Button>
           </div>
           <AddProductStatus
@@ -93,6 +126,7 @@ const AddProductForm = ({ categories }: Props) => {
             category={category}
             setCategory={setCategory}
             categories={categories}
+            isLoading={isLoading}
           />
         </div>
       </form>

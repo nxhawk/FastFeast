@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 "use client";
-import { type Category } from "@prisma/client";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { SlidersHorizontal, SquarePen } from "lucide-react";
 import React from "react";
@@ -19,6 +18,7 @@ import {
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -32,33 +32,96 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import CustomPagination from "@/components/common/pagination/custom-pagination";
 import ConfirmDelete from "@/components/common/confirm-delete";
-import { deleteCategory } from "@/models/category";
+import { type FullProduct } from "@/models/product";
+import { formateDate, statusToTitle } from "@/utils/helper";
+import { Badge } from "@/components/ui/badge";
 
 interface Props {
-  categories: Category[];
+  products: FullProduct[];
 }
 
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<FullProduct>[] = [
   {
-    accessorKey: "Tên",
+    accessorKey: "Ảnh",
+    header: () => <div>Ảnh</div>,
+    cell: ({ row }) => {
+      const product = row.original;
+      return (
+        <Image
+          width={100}
+          height={200}
+          src={product.image?.path || ""}
+          alt="product image"
+          className="object-cover min-w-20 min-h-20 max-w-20 max-h-20"
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "Tiêu đề",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Tên
+          Tiêu đề
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const category = row.original;
-      return <div className="px-4">{category.name}</div>;
+      const product = row.original;
+      return <div className="px-4">{product.name}</div>;
     },
   },
   {
-    accessorKey: "slug",
-    header: () => <div>Slug</div>,
+    accessorKey: "Cập nhật",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Cập nhật
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue("slug")}</div>;
+      const product = row.original;
+      return <div className="px-4">{formateDate(product.updatedAt)}</div>;
+    },
+  },
+  {
+    accessorKey: "Tình trạng",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Tình trạng
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const product = row.original;
+      return <Badge variant={statusToTitle(product.status)?.variant}>{statusToTitle(product.status)?.title}</Badge>;
+    },
+  },
+  {
+    accessorKey: "Danh mục",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Danh mục
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const product = row.original;
+      return (
+        <div className="flex gap-2">
+          {product.categories.map((category) => (
+            <Badge key={category.category.id} variant="secondary" className="text-nowrap">
+              {category.category.name}
+            </Badge>
+          ))}
+        </div>
+      );
     },
   },
   {
@@ -71,10 +134,10 @@ export const columns: ColumnDef<Category>[] = [
       const handleDelete = async () => {
         const id = payment.id;
         try {
-          await deleteCategory(id);
-          toast.success("Xóa category thành công");
-          // reload page
-          router.refresh();
+          // await deleteCategory(id);
+          // toast.success("Xóa category thành công");
+          // // reload page
+          // router.refresh();
         } catch (error) {
           toast.error("Error");
         }
@@ -82,11 +145,7 @@ export const columns: ColumnDef<Category>[] = [
 
       return (
         <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => router.push(`/dashboard/products/categories/${payment.id}`)}
-          >
+          <Button variant="ghost" size="icon" onClick={() => router.push(`/dashboard/products/${payment.id}`)}>
             <SquarePen size={17} />
           </Button>
           <DropdownMenu>
@@ -116,7 +175,7 @@ export type TPagination = {
   pageSize: number;
 };
 
-const CategoryTable = ({ categories }: Props) => {
+const ProductTable = ({ products }: Props) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -127,7 +186,7 @@ const CategoryTable = ({ categories }: Props) => {
   });
 
   const table = useReactTable({
-    data: categories,
+    data: products,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -151,7 +210,7 @@ const CategoryTable = ({ categories }: Props) => {
     <div className="w-full">
       <div className="flex items-center py-4 gap-2">
         <Input
-          placeholder="Lọc tên..."
+          placeholder="Lọc tiêu đề..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
           className="max-w-sm"
@@ -231,4 +290,4 @@ const CategoryTable = ({ categories }: Props) => {
   );
 };
 
-export default CategoryTable;
+export default ProductTable;

@@ -26,7 +26,7 @@ const AddCategoryForm = ({ category }: Props) => {
       // redirect to list category page
       router.push("/dashboard/products/categories");
     } catch (error) {
-      toast.error("Error");
+      toast.error("Có lỗi xảy ra");
     } finally {
       setIsLoading(false);
     }
