@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { toSlug } from "@/utils/helper";
+import { convertToVND, toSlug } from "@/utils/helper";
 
 interface Props {
   isLoading: boolean;
@@ -14,10 +14,12 @@ interface Props {
   slug: string;
   description: string;
   image: string;
+  price: number;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   setSlug: React.Dispatch<React.SetStateAction<string>>;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
   setImage: React.Dispatch<React.SetStateAction<string>>;
+  setPrice: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const ProductInformation = ({
@@ -30,6 +32,8 @@ const ProductInformation = ({
   setDescription,
   image,
   setImage,
+  price,
+  setPrice,
 }: Props) => {
   function handleChangeImage(changeEvent: React.ChangeEvent<HTMLInputElement>) {
     if (!changeEvent.target.files) return;
@@ -62,7 +66,7 @@ const ProductInformation = ({
                   <AvatarFallback>Avatar</AvatarFallback>
                 </Avatar>
                 <div>
-                  <Input id="image" type="file" onChange={handleChangeImage} multiple={false} />
+                  <Input id="image" type="file" onChange={handleChangeImage} multiple={false} disabled={isLoading} />
                   <p className="mt-2 text-[0.8rem] text-muted-foreground">Vui lòng chọn ảnh</p>
                 </div>
               </div>
@@ -94,9 +98,29 @@ const ProductInformation = ({
                   value={slug}
                   onChange={(e) => setSlug(e.target.value)}
                 />
-                <Button variant="secondary" type="button" onClick={() => setSlug(toSlug(title))}>
+                <Button variant="secondary" type="button" onClick={() => setSlug(toSlug(title))} disabled={isLoading}>
                   Generate
                 </Button>
+              </div>
+            </div>
+
+            <div className="flex max-md:flex-col justify-between gap-2">
+              <Label htmlFor="price" className="md:w-40">
+                Giá bán
+              </Label>
+              <div className="flex-1 flex gap-2 items-center">
+                <Input
+                  id="price"
+                  className="flex-2"
+                  type="number"
+                  max={2000000}
+                  min={10000}
+                  required
+                  disabled={isLoading}
+                  value={price}
+                  onChange={(e) => setPrice(parseInt(e.target.value))}
+                />
+                <div className="px-2 mt-1 text-sm flex-1">{!isNaN(price) ? convertToVND(price) : ""}</div>
               </div>
             </div>
 

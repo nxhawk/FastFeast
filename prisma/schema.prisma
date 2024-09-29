@@ -13,4 +13,47 @@ model Category {
   slug            String          @unique
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+  products        CategoriesOnProducts[]
+}
+
+model Product {
+    id            String          @id @default(auto()) @map("_id") @db.ObjectId
+    name          String  
+    slug          String          @unique
+    description   String? 
+    price         Int 
+    status        Status          @default(DRAFT)
+    image         Image?
+    createdAt     DateTime        @default(now())
+    updatedAt     DateTime        @updatedAt
+    categories    CategoriesOnProducts[]  
+    deleted       Boolean         @default(false)
+}
+
+model CategoriesOnProducts {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  product       Product        @relation(fields: [productId], references: [id])
+  productId     String         @db.ObjectId
+  category      Category       @relation(fields: [categoryId], references: [id])
+  categoryId    String         @db.ObjectId
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([categoryId, productId])
+}
+
+model Image {
+    id         String         @id @default(auto()) @map("_id") @db.ObjectId
+    name       String
+    path       String
+    createdAt  DateTime       @default(now())
+    updatedAt  DateTime       @updatedAt
+    product    Product?       @relation(fields: [productId], references: [id])
+    productId  String?        @unique @db.ObjectId
+}
+
+enum Status {
+  DRAFT
+  PUBLIC
+  OUTSTOCK
 }

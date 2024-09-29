@@ -3,6 +3,10 @@ export function getErrorMessage(error: unknown): string {
   return String(error);
 }
 
+export function convertToVND(money: number) {
+  return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(money);
+}
+
 export function toSlug(str: string) {
   str = str.toLowerCase();
 

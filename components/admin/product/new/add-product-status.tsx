@@ -1,5 +1,5 @@
 import React from "react";
-import { type Category } from "@prisma/client";
+import { Status, type Category } from "@prisma/client";
 import SelectCategory from "./select-category";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -7,10 +7,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 interface Props {
   categories: Category[];
-  status: string;
-  category: string;
-  setStatus: React.Dispatch<React.SetStateAction<string>>;
-  setCategory: React.Dispatch<React.SetStateAction<string>>;
+  status: Status;
+  category: Category[];
+  setStatus: React.Dispatch<React.SetStateAction<Status>>;
+  setCategory: React.Dispatch<React.SetStateAction<Category[]>>;
 }
 
 const AddProductStatus = ({ categories, status, setStatus, category, setCategory }: Props) => {
@@ -23,14 +23,14 @@ const AddProductStatus = ({ categories, status, setStatus, category, setCategory
               <Label htmlFor="status" className="md:w-40">
                 Tình trạng
               </Label>
-              <Select onValueChange={(e) => setStatus(e)} value={status} defaultValue="nhap" required>
+              <Select onValueChange={(e: Status) => setStatus(e)} value={status} defaultValue="nhap" required>
                 <SelectTrigger>
                   <SelectValue placeholder="Select a verified status to display" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="congkhai">Công khai</SelectItem>
-                  <SelectItem value="nhap">Nháp</SelectItem>
-                  <SelectItem value="hethang">Hết hàng</SelectItem>
+                  <SelectItem value={Status.PUBLIC}>Công khai</SelectItem>
+                  <SelectItem value={Status.DRAFT}>Nháp</SelectItem>
+                  <SelectItem value={Status.OUTSTOCK}>Hết hàng</SelectItem>
                 </SelectContent>
               </Select>
             </div>
