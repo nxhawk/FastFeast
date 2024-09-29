@@ -19,6 +19,8 @@ import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { type Category } from "@prisma/client";
+import FilterCategory from "./filter-category";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -38,6 +40,7 @@ import { Badge } from "@/components/ui/badge";
 
 interface Props {
   products: FullProduct[];
+  categories: Category[];
 }
 
 export const columns: ColumnDef<FullProduct>[] = [
@@ -175,7 +178,7 @@ export type TPagination = {
   pageSize: number;
 };
 
-const ProductTable = ({ products }: Props) => {
+const ProductTable = ({ products, categories }: Props) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -209,15 +212,18 @@ const ProductTable = ({ products }: Props) => {
   return (
     <div className="w-full">
       <div className="flex items-center py-4 gap-2">
-        <Input
-          placeholder="Lọc tiêu đề..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
-          className="max-w-sm"
-        />
+        <div className="flex items-center gap-5">
+          <Input
+            placeholder="Lọc tiêu đề..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
+            className="max-w-sm"
+          />
+          <FilterCategory categories={categories} />
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="ml-auto max-md:hidden">
               <SlidersHorizontal className="mr-2 h-4 w-4" />
               View
             </Button>

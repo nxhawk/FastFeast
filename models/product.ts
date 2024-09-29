@@ -99,7 +99,42 @@ export async function getProductById(id: string) {
   return product;
 }
 
-export async function listProducts() {
+export async function listProducts(categoryId: string) {
+  let category = null;
+  try {
+    category = await prisma.category.findFirst({
+      where: {
+        id: categoryId,
+      },
+    });
+  } catch (error) {}
+
+  if (category) {
+    const products = await prisma.product.findMany({
+      where: {
+        categories: {
+          some: {
+            categoryId: category.id,
+          },
+        },
+      },
+      orderBy: [
+        {
+          updatedAt: "desc",
+        },
+      ],
+      include: {
+        image: true,
+        categories: {
+          include: {
+            category: true,
+          },
+        },
+      },
+    });
+
+    return products;
+  }
   const products = await prisma.product.findMany({
     orderBy: [
       {
