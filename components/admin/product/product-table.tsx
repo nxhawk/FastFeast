@@ -289,7 +289,11 @@ const ProductTable = ({ products, categories }: Props) => {
           selected.
         </div>
         <div className="space-x-2">
-          <CustomPagination pagination={pagination} setPagination={setPagination} />
+          <CustomPagination
+            pagination={pagination}
+            setPagination={setPagination}
+            totalItem={table.getFilteredRowModel().rows.length}
+          />
         </div>
       </div>
     </div>

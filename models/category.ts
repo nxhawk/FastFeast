@@ -46,6 +46,7 @@ export async function newCategory(name: string, slug: string) {
     },
   });
   revalidatePath("/dashboard/products/categories");
+  revalidatePath("/dashboard/products/add");
 
   return newCategory;
 }

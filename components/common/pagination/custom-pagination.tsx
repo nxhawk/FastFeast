@@ -9,9 +9,11 @@ import { type TPagination } from "@/components/admin/category/category-table";
 interface Props {
   pagination: TPagination;
   setPagination: React.Dispatch<React.SetStateAction<TPagination>>;
+  totalItem: number;
 }
 
-const CustomPagination = ({ pagination, setPagination }: Props) => {
+const CustomPagination = ({ pagination, setPagination, totalItem }: Props) => {
+  const totalPage = Math.floor(totalItem / pagination.pageSize) + (totalItem % pagination.pageSize > 0 ? 1 : 0);
   return (
     <div className="flex items-center gap-3 md:gap-8 max-md:flex-col-reverse">
       <div className="flex items-center gap-3">
@@ -19,7 +21,7 @@ const CustomPagination = ({ pagination, setPagination }: Props) => {
           Rows per page
         </Label>
         <Select
-          onValueChange={(e) => setPagination({ ...pagination, pageSize: parseInt(e) })}
+          onValueChange={(e) => setPagination({ pageIndex: 0, pageSize: parseInt(e) })}
           defaultValue={"10"}
           required
         >
@@ -35,18 +37,42 @@ const CustomPagination = ({ pagination, setPagination }: Props) => {
           </SelectContent>
         </Select>
       </div>
-      <div className="flex items-center justify-center text-sm font-medium">Page {pagination.pageIndex + 1} of 1</div>
+      <div className="flex items-center justify-center text-sm font-medium">
+        Page {pagination.pageIndex + 1} of {totalPage}
+      </div>
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="icon" className="max-md:hidden">
+        <Button
+          variant="outline"
+          size="icon"
+          className="max-md:hidden"
+          disabled={pagination.pageIndex === 0}
+          onClick={() => setPagination({ ...pagination, pageIndex: 0 })}
+        >
           <ChevronsLeft className="h-5 w-5 text-slate-400" />
         </Button>
-        <Button variant="outline" size="icon">
+        <Button
+          variant="outline"
+          size="icon"
+          disabled={pagination.pageIndex === 0}
+          onClick={() => setPagination({ ...pagination, pageIndex: pagination.pageIndex - 1 })}
+        >
           <ChevronLeft className="h-5 w-5 text-slate-400" />
         </Button>
-        <Button variant="outline" size="icon">
+        <Button
+          variant="outline"
+          size="icon"
+          disabled={pagination.pageIndex === totalPage - 1}
+          onClick={() => setPagination({ ...pagination, pageIndex: pagination.pageIndex + 1 })}
+        >
           <ChevronRight className="h-5 w-5 text-slate-400" />
         </Button>
-        <Button variant="outline" size="icon" className="max-md:hidden">
+        <Button
+          variant="outline"
+          size="icon"
+          className="max-md:hidden"
+          disabled={pagination.pageIndex === totalPage - 1}
+          onClick={() => setPagination({ ...pagination, pageIndex: totalPage - 1 })}
+        >
           <ChevronsRight className="h-5 w-5 text-slate-400" />
         </Button>
       </div>

@@ -38,7 +38,7 @@ const AdminLayout = () => {
     <div className="max-w-screen-lg mx-auto flex justify-between items-center h-16 px-2">
       <div className="flex items-center gap-5 h-full">
         <AdminMenuDropdown />
-        <Logo showText={true} />
+        <Logo showText={true} isAdmin={true} />
         <div className="flex items-center gap-2 h-full font-medium max-md:hidden">
           <NavItem title="Dashboard" href="/dashboard" pathName={pathName} />
           <NavItem title="Đơn hàng" href="/dashboard/orders" pathName={pathName} />
