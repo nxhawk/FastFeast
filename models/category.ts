@@ -1,3 +1,5 @@
+"use server";
+import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prismadb";
 
 export async function updateCategory(id: string, name: string, slug: string) {
@@ -10,6 +12,8 @@ export async function updateCategory(id: string, name: string, slug: string) {
       slug,
     },
   });
+  revalidatePath("/dashboard/products/categories");
+  revalidatePath(`/dashboard/products/categories/${id}`);
   return updatedCategory;
 }
 
@@ -41,6 +45,7 @@ export async function newCategory(name: string, slug: string) {
       slug,
     },
   });
+  revalidatePath("/dashboard/products/categories");
 
   return newCategory;
 }
@@ -51,6 +56,7 @@ export async function deleteCategory(id: string) {
       id,
     },
   });
+  revalidatePath("/dashboard/products/categories");
 
   return deteledCategory;
 }

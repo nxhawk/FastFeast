@@ -6,6 +6,7 @@ import { type Category } from "@prisma/client";
 import CategoryInformation from "./category-information";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/common/back-button";
+import { newCategory, updateCategory } from "@/models/category";
 
 interface Props {
   category: Category | null;
@@ -17,27 +18,13 @@ const AddCategoryForm = ({ category }: Props) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const router = useRouter();
 
-  const updateCategory = async () => {
+  const updateOneCategory = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(`/api/category/${category?.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          slug,
-        }),
-      });
-      const json = await res.json();
-      if (res.status === 200) {
-        toast.success("Cập nhật category thành công");
-        // redirect to list category page
-        router.push("/dashboard/products/categories");
-      } else {
-        toast.error(json.message as string);
-      }
+      await updateCategory(category?.id || "", name, slug);
+      toast.success("Cập nhật category thành công");
+      // redirect to list category page
+      router.push("/dashboard/products/categories");
     } catch (error) {
       toast.error("Error");
     } finally {
@@ -48,28 +35,12 @@ const AddCategoryForm = ({ category }: Props) => {
   const addNewCategory = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch("/api/category", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          slug,
-        }),
-      });
-      const json = await res.json();
-      if (res.status === 200) {
-        toast.success("Thêm category thành công");
-        setName("");
-        setSlug("");
-        // redirect to list category page
-        router.push("/dashboard/products/categories");
-      } else {
-        toast.error(json.message as string);
-      }
+      await newCategory(name, slug);
+      toast.success("Thêm category thành công");
+      //redirect to list category page
+      router.push("/dashboard/products/categories");
     } catch (error) {
-      toast.error("Error");
+      toast.error("Category này đã tồn tại");
     } finally {
       setIsLoading(false);
     }
@@ -79,7 +50,7 @@ const AddCategoryForm = ({ category }: Props) => {
     e.preventDefault();
     // add new slug
     if (category) {
-      await updateCategory();
+      await updateOneCategory();
     } else {
       await addNewCategory();
     }

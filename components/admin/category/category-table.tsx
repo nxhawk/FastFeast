@@ -32,6 +32,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import CustomPagination from "@/components/common/pagination/custom-pagination";
 import ConfirmDelete from "@/components/common/confirm-delete";
+import { deleteCategory } from "@/models/category";
 
 interface Props {
   categories: Category[];
@@ -67,20 +68,10 @@ export const columns: ColumnDef<Category>[] = [
       const handleDelete = async () => {
         const id = payment.id;
         try {
-          const res = await fetch(`/api/category/${id}`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const json = await res.json();
-          if (res.status === 200) {
-            toast.success("Xóa category thành công");
-            // reload page
-            router.refresh();
-          } else {
-            toast.error(json.message as string);
-          }
+          await deleteCategory(id);
+          toast.success("Xóa category thành công");
+          // reload page
+          router.refresh();
         } catch (error) {
           toast.error("Error");
         }
