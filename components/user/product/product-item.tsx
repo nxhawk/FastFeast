@@ -31,7 +31,7 @@ const ProductItem = ({ product }: Props) => {
               alt="product image"
             />
           </div>
-          <div className="flex flex-col flex-1 p-1">
+          <div className="flex flex-col flex-1 p-1 pt-3">
             <div className="md:text-center flex flex-col md:items-center md:justify-center">
               <p className="text-sm lg:text-base leading-tight h-8 lg:h-12 line-clamp-2 font-medium">{product.name}</p>
               <div className="font-bold text-gl lg:text-xl">{convertToVND(product.price)}</div>

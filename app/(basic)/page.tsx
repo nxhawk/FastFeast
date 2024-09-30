@@ -2,8 +2,7 @@ import { type Metadata } from "next";
 import React from "react";
 import ListCategory from "@/components/user/list-category";
 import { listCategories } from "@/models/category";
-import { listProducts } from "@/models/product";
-import ProductSlider from "@/components/user/product/product-slider";
+import ListProductHome from "@/components/user/product/list-product-home";
 
 export const metadata: Metadata = {
   title: "Sản phẩm | FastFeast - Fast Food Ordering website",
@@ -11,15 +10,16 @@ export const metadata: Metadata = {
   icons: "images/logo.png",
 };
 
-const Page = async () => {
+const Page = async ({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) => {
+  const categoryId = searchParams?.categoryId ? decodeURI(searchParams?.categoryId as string) : "";
+
   const categories = await listCategories();
-  const products = await listProducts("");
 
   return (
     <div className="relative">
-      <ListCategory categories={categories} />
+      <ListCategory categories={categories} categoryId={categoryId} isClose={false} />
       <div className="pt-28">
-        <ProductSlider products={products} title="chicken" />
+        <ListProductHome categories={categories} categoryId={categoryId} />
       </div>
     </div>
   );

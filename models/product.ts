@@ -42,7 +42,7 @@ export async function updateProduct(
   if (!product) return;
 
   for (const category of product.categories) {
-    await deleteCategoryConnectProduct(product.id as string, category.categoryId as string);
+    await deleteCategoryConnectProduct(product.id, category.categoryId);
   }
 
   const updatedProduct = await prisma.product.update({

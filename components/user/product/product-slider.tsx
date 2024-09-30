@@ -4,6 +4,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { SwiperSlide, Swiper } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ProductItem from "./product-item";
 import { type FullProduct } from "@/models/product";
 import { Button } from "@/components/ui/button";
@@ -11,10 +12,24 @@ import { Button } from "@/components/ui/button";
 interface Props {
   products?: FullProduct[];
   title: string;
-  func?: () => void;
+  categoryId?: string;
 }
 
-const ProductSlider = ({ products, title, func }: Props) => {
+const ProductSlider = ({ products, title, categoryId }: Props) => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const changeRouter = (categoryId: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (categoryId !== "all") {
+      params.set("categoryId", categoryId);
+    } else {
+      params.delete("categoryId");
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <div className="relative products-list">
       <div className="font-bold uppercase text-2xl">{title}</div>
@@ -47,15 +62,19 @@ const ProductSlider = ({ products, title, func }: Props) => {
           },
         }}
       >
-        {products?.map((product) => (
-          <SwiperSlide key={product.id}>
-            <ProductItem product={product} />
-          </SwiperSlide>
-        ))}
+        {products?.map((product, idx) => {
+          if (idx < 14)
+            return (
+              <SwiperSlide key={product.id}>
+                <ProductItem product={product} />
+              </SwiperSlide>
+            );
+          return <div key={product.id}></div>;
+        })}
       </Swiper>
-      {typeof func === "function" && (
-        <div className="flex items-center justify-center">
-          <Button variant="outline" onClick={func}>
+      {categoryId && (
+        <div className="flex items-center justify-center my-5">
+          <Button variant="outline" onClick={() => changeRouter(categoryId || "all")}>
             Xem tất cả
           </Button>
         </div>
