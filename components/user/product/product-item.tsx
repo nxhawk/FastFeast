@@ -67,6 +67,7 @@ const ProductItem = ({ product }: Props) => {
                 disabled={outStock}
                 variant="ghost"
                 className="uppercase font-semibold text-red-500 hover:text-red-600"
+                onClick={handleAddToCart}
               >
                 mua ngay
               </Button>

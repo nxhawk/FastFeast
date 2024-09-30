@@ -8,22 +8,34 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { convertToVND } from "@/utils/helper";
 import { type AppState } from "@/lib/store";
+import { cn } from "@/lib/utils";
 
 const Cart = () => {
   const products = useSelector((state: AppState) => state.cart.products);
   const totalProducts = useSelector((state: AppState) => state.cart.totalProduct);
+  const [storeCartCount, setStoreCartCount] = React.useState(0);
   const calcTotalPrice = () => {
     let totalPrice = 0;
     products.map((product) => (totalPrice += product.price * product.count));
     return totalPrice;
   };
+  React.useEffect(() => {
+    setTimeout(() => {
+      setStoreCartCount(totalProducts);
+    }, 1000);
+  }, [totalProducts]);
 
   return (
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <ShoppingCart />
-          <div className="absolute top-0 right-0 flex rounded-full aspect-square w-4 items-center justify-center bg-red-500 text-white">
+          <div
+            className={cn(
+              "absolute top-0 right-0 flex rounded-full aspect-square w-4 items-center justify-center bg-red-500 text-white",
+              storeCartCount !== totalProducts && "animate-[ping_1s_ease-in-out]",
+            )}
+          >
             <span className="leading-none text-[9px]">{totalProducts}</span>
           </div>
         </Button>

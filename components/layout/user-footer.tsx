@@ -7,8 +7,8 @@ const UserFooter = () => {
   return (
     <div className="border-t py-4 flex flex-col justify-center items-center gap-3">
       <Logo showText={true} />
-      <div className="text-red-500 font-bold">Chưa mở cửa</div>
-      <div> 227 Đ. Nguyễn Văn Cừ, Phường 4, Quận 5, Hồ Chí Minh</div>
+      {/* <div className="text-red-500 font-bold">Chưa mở cửa</div> */}
+      <div className="mt-1"> 227 Đ. Nguyễn Văn Cừ, Phường 4, Quận 5, Hồ Chí Minh</div>
       <div className="flex items-center gap-5">
         <Link href="/">
           <Image src="/images/youtube.png" alt="youtube" width={40} height={40} />
