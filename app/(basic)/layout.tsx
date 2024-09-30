@@ -2,6 +2,7 @@ import { Toaster } from "react-hot-toast";
 import "../globals.css";
 import UserLayout from "@/components/layout/user-layout";
 import UserFooter from "@/components/layout/user-footer";
+import StoreContext from "@/context/store-context";
 
 export default function RootLayout({
   children,
@@ -11,13 +12,16 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body suppressHydrationWarning={true} className={`antialiased`}>
-        <div className="pt-16">
-          <div className="z-20 fixed top-0 left-0 bg-white border-b w-full shadow">
-            <UserLayout />
+        <StoreContext>
+          <div className="pt-16">
+            <div className="z-20 fixed top-0 left-0 bg-white border-b w-full shadow">
+              <UserLayout />
+            </div>
+            <main className="mb-20 max-w-screen-lg mx-auto px-2">{children}</main>
+            <UserFooter />
           </div>
-          <main className="mb-20 max-w-screen-lg mx-auto px-2">{children}</main>
-          <UserFooter />
-        </div>
+        </StoreContext>
+
         <Toaster position="top-center" reverseOrder={false} toastOptions={{ className: "w-fit" }} />
       </body>
     </html>
