@@ -8,7 +8,7 @@ interface Props {
 
 const ListCategory = ({ categories }: Props) => {
   return (
-    <div className="fixed top-[65px] left-0 w-full bg-white">
+    <div className="fixed top-[65px] left-0 w-full bg-white z-[10000]">
       <div className="bg-red-50">
         <div className="max-w-screen-lg max-md:text-sm mx-auto py-2 px-1">
           <span>Ngoài khung giờ hoạt động của nhà hàng. Giờ hoạt động: </span>
@@ -16,7 +16,7 @@ const ListCategory = ({ categories }: Props) => {
         </div>
       </div>
       <div className="max-w-screen-lg mx-auto mt-2 px-1 pb-1">
-        <div className="flex gap-2 overflow-x-auto">
+        <div className="flex gap-2 overflow-x-auto pb-1">
           <Button variant={"secondary"} className="font-medium">
             Tất cả
           </Button>
