@@ -26,7 +26,7 @@ const ListCategory = ({ categories, categoryId, isClose = false }: Props) => {
   };
 
   return (
-    <div className="fixed top-[65px] left-0 w-full bg-white z-[2]">
+    <div className="fixed top-[65px] left-0 w-full bg-white z-[3]">
       {isClose && (
         <div className="bg-red-50">
           <div className="max-w-screen-lg max-md:text-sm mx-auto px-1 py-0.5">
