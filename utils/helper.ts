@@ -1,6 +1,8 @@
 import { Status } from "@prisma/client";
 import moment from "moment";
 
+export const vietnamPhoneNumberRegex = /^(0)(3|5|7|8|9)([0-9]{8})$/;
+
 export function statusToTitle(status: Status) {
   type TVariant = "secondary" | "destructive" | "default";
   if (status === Status.DRAFT)
