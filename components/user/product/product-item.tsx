@@ -3,6 +3,8 @@ import React from "react";
 import Image from "next/image";
 import { Status } from "@prisma/client";
 import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { type FullProduct } from "@/models/product";
@@ -16,6 +18,7 @@ interface Props {
 
 const ProductItem = ({ product }: Props) => {
   const outStock = product.status === Status.OUTSTOCK;
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const handleAddToCart = () => {
     dispatch(
@@ -59,7 +62,10 @@ const ProductItem = ({ product }: Props) => {
                 disabled={outStock}
                 variant="destructive"
                 className="uppercase font-semibold"
-                onClick={handleAddToCart}
+                onClick={() => {
+                  handleAddToCart();
+                  toast.success("Đã thêm vào giỏ hàng");
+                }}
               >
                 thêm vào giỏ
               </Button>
@@ -67,7 +73,10 @@ const ProductItem = ({ product }: Props) => {
                 disabled={outStock}
                 variant="ghost"
                 className="uppercase font-semibold text-red-500 hover:text-red-600"
-                onClick={handleAddToCart}
+                onClick={() => {
+                  handleAddToCart();
+                  router.push("/checkout");
+                }}
               >
                 mua ngay
               </Button>

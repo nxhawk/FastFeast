@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36" viewBox="0 0 36 36">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.077" y1="0.174" x2="0.878" y2="0.886" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#21b554"/>
+      <stop offset="1" stop-color="#039e37"/>
+    </linearGradient>
+  </defs>
+  <g id="tienmat" transform="translate(-191 -718)">
+    <rect id="Rectangle_15687" data-name="Rectangle 15687" width="36" height="36" transform="translate(191 718)" fill="#fff" opacity="0"/>
+    <g id="tienmat-2" data-name="tienmat" transform="translate(1382 1672)">
+      <rect id="Rectangle_15742" data-name="Rectangle 15742" width="36" height="24" rx="4" transform="translate(-1191 -948)" fill="url(#linear-gradient)"/>
+      <circle id="Ellipse_468" data-name="Ellipse 468" cx="7" cy="7" r="7" transform="translate(-1180 -943)" fill="#fff" opacity="0.6"/>
+      <circle id="Ellipse_469" data-name="Ellipse 469" cx="2" cy="2" r="2" transform="translate(-1188 -945)" fill="#fff" opacity="0.4"/>
+      <circle id="Ellipse_471" data-name="Ellipse 471" cx="2" cy="2" r="2" transform="translate(-1162 -931)" fill="#fff" opacity="0.4"/>
+    </g>
+  </g>
+</svg>

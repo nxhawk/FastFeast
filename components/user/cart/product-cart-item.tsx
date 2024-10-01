@@ -30,7 +30,7 @@ const ProductCartItem = ({ product }: Props) => {
   };
 
   return (
-    <div className="w-full flex gap-4">
+    <div className="w-full flex gap-4 border-b pb-2">
       <Image src={product.image} width={100} height={100} alt="product image" />
       <div className="flex flex-col flex-1">
         <div className="flex justify-between items-start py-1">

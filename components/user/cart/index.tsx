@@ -2,23 +2,18 @@
 import React from "react";
 import { ShoppingCart } from "lucide-react";
 import { useSelector } from "react-redux";
-import ProductCartItem from "./product-cart-item";
+import { useRouter } from "next/navigation";
+import ListProduct from "./list-product";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Badge } from "@/components/ui/badge";
-import { convertToVND } from "@/utils/helper";
 import { type AppState } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 const Cart = () => {
-  const products = useSelector((state: AppState) => state.cart.products);
+  const router = useRouter();
   const totalProducts = useSelector((state: AppState) => state.cart.totalProduct);
   const [storeCartCount, setStoreCartCount] = React.useState(0);
-  const calcTotalPrice = () => {
-    let totalPrice = 0;
-    products.map((product) => (totalPrice += product.price * product.count));
-    return totalPrice;
-  };
+
   React.useEffect(() => {
     setTimeout(() => {
       setStoreCartCount(totalProducts);
@@ -45,33 +40,8 @@ const Cart = () => {
           <div className="p-2 border-b shadow">
             <div className="uppercase font-bold">Giỏ hàng</div>
           </div>
-          <div className="flex-1 flex flex-col mt-2 overflow-y-auto px-1">
-            <div className="overflow-y-auto flex flex-col" id="style-2">
-              {products.length <= 0 ? (
-                <div className="text-center text-gray-400 mt-5">
-                  Giỏ hàng đang trống. Vui lòng quay lại trang chủ để tiếp tục mua hàng.
-                </div>
-              ) : (
-                <div className="flex flex-col gap-2">
-                  {products.map((product) => (
-                    <ProductCartItem key={product.id} product={product} />
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+          <ListProduct />
           <div className="w-full p-2 pt-1">
-            <div>
-              <div className="border-t w-full py-4 flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <div className="font-bold">TỔNG</div>
-                  <Badge variant="destructive" className="text-sm">
-                    {totalProducts} món
-                  </Badge>
-                </div>
-                <div className="font-bold text-xl flex-1 text-end">{convertToVND(calcTotalPrice())}</div>
-              </div>
-            </div>
             <div className="flex gap-3 pt-4 border-t">
               <SheetTrigger asChild>
                 <Button
@@ -81,9 +51,16 @@ const Cart = () => {
                   Thêm món
                 </Button>
               </SheetTrigger>
-              <Button variant="destructive" className="font-semibold uppercase flex-1" disabled={totalProducts <= 0}>
-                Thanh toán
-              </Button>
+              <SheetTrigger asChild>
+                <Button
+                  variant="destructive"
+                  className="font-semibold uppercase flex-1"
+                  disabled={totalProducts <= 0}
+                  onClick={() => router.push("/checkout")}
+                >
+                  Thanh toán
+                </Button>
+              </SheetTrigger>
             </div>
           </div>
         </div>
