@@ -2,7 +2,7 @@ import React from "react";
 
 interface Props {
   value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue: (value: string) => void;
   placeholder?: string;
   icon: React.ReactNode;
 }

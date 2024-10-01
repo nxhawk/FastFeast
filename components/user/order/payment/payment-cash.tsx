@@ -1,14 +1,15 @@
 import { Check } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import { type EPaymentType } from "..";
 import { cn } from "@/lib/utils";
 
 interface Props {
   icon: string;
-  type: string;
+  type: EPaymentType;
   title: string;
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  value: EPaymentType;
+  setValue: React.Dispatch<React.SetStateAction<EPaymentType>>;
 }
 
 const PaymentCash = ({ icon, type, value, setValue, title }: Props) => {
