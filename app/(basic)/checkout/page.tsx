@@ -1,5 +1,6 @@
 import { type Metadata } from "next";
 import React from "react";
+import Loading from "./loading";
 import OrderPage from "@/components/user/order/order-page";
 
 export const metadata: Metadata = {
