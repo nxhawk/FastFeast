@@ -9,6 +9,7 @@ import { type AppState } from "@/lib/store";
 const ListProduct = () => {
   const products = useSelector((state: AppState) => state.cart.products);
   const totalProducts = useSelector((state: AppState) => state.cart.totalProduct);
+
   const calcTotalPrice = () => {
     let totalPrice = 0;
     products.map((product) => (totalPrice += product.price * product.count));

@@ -19,7 +19,7 @@ const UserOrderInfo = ({ formik }: Props) => {
           <CardTitle className="uppercase border-b pb-4">Thông tin người nhận</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex max-md:flex-col gap-3 md:justify-between md:items-center w-full">
+          <div className="flex max-md:flex-col gap-3 md:justify-between md:items-start w-full">
             <div className="flex-1">
               <InputHeader
                 value={formik.values.phoneNumber}

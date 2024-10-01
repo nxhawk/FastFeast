@@ -1,9 +1,9 @@
 import { type Metadata } from "next";
 import React from "react";
-import OrderForm from "@/components/user/order";
+import OrderPage from "@/components/user/order/order-page";
 
 export const metadata: Metadata = {
-  title: "Thanh toán | FastFeast - Fast Food Ordering website",
+  title: "Xác nhận đặt hàng | FastFeast - Fast Food Ordering website",
   description: "Fast Food Ordering website",
   icons: "images/logo.png",
 };
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const Page = () => {
   return (
     <div>
-      <OrderForm />
+      <OrderPage />
     </div>
   );
 };

@@ -7,7 +7,7 @@ import { Store } from "./name";
 const persistConfig = {
   key: Store.ROOT,
   storage,
-  blacklist: [],
+  blacklist: [Store.SUBMIT],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

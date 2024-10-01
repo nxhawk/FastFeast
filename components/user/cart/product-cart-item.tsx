@@ -42,6 +42,7 @@ const ProductCartItem = ({ product }: Props) => {
         <div className="flex justify-between items-center py-1">
           <div className="flex items-center gap-4">
             <button
+              type="button"
               className={cn(
                 "focus:outline-red-500 p-1 rounded-full border border-red-500",
                 product.count <= 1 && "opacity-50",
@@ -53,6 +54,7 @@ const ProductCartItem = ({ product }: Props) => {
             </button>
             <div className="font-bold text-lg">{product.count}</div>
             <button
+              type="button"
               className="focus:outline-red-500 p-1 rounded-full border border-red-500"
               onClick={() => handleChangeProductCount(1)}
             >

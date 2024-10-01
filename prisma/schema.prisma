@@ -17,17 +17,18 @@ model Category {
 }
 
 model Product {
-    id            String          @id @default(auto()) @map("_id") @db.ObjectId
-    name          String  
-    slug          String          @unique
-    description   String? 
-    price         Int 
-    status        Status          @default(DRAFT)
-    image         Image?
-    createdAt     DateTime        @default(now())
-    updatedAt     DateTime        @updatedAt
-    categories    CategoriesOnProducts[]  
-    deleted       Boolean         @default(false)
+    id              String          @id @default(auto()) @map("_id") @db.ObjectId
+    name            String  
+    slug            String          @unique
+    description     String? 
+    price           Int 
+    status          Status          @default(DRAFT)
+    image           Image?
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+    categories      CategoriesOnProducts[]  
+    productOnOrder  ProductOnOrder[]
+    deleted         Boolean         @default(false)
 }
 
 model CategoriesOnProducts {
@@ -38,7 +39,6 @@ model CategoriesOnProducts {
   categoryId    String         @db.ObjectId
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
-
   @@unique([categoryId, productId])
 }
 
@@ -50,6 +50,45 @@ model Image {
     updatedAt  DateTime       @updatedAt
     product    Product?       @relation(fields: [productId], references: [id])
     productId  String?        @unique @db.ObjectId
+}
+
+model Order {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  fullName          String
+  phoneNumber       String
+  address           String
+  totalPrice        Int
+  status            OrderState     @default(NEW_ORDER)
+  paymentMethod     PaymentMethod  @default(CASH)
+  note              String?
+  items             ProductOnOrder[]
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+}
+
+model ProductOnOrder {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  quantity          Int
+  order             Order         @relation(fields: [orderId], references: [id])
+  orderId           String        @db.ObjectId
+  product           Product       @relation(fields: [productId], references: [id])
+  productId         String        @db.ObjectId
+
+  @@unique([orderId, productId])
+}
+
+enum OrderState {
+  NEW_ORDER // đơn hàng mới
+  CONFIRMED // đã xác nhận
+  PROCESSING // đang chế biến
+  DELIVERING // đang giao hàng
+  COMPLETED // hoàn tất
+  CANCELLED // đơn hủy
+}
+
+enum PaymentMethod {
+  BANK
+  CASH
 }
 
 enum Status {

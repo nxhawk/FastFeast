@@ -1,22 +1,17 @@
 "use client";
 import React from "react";
-import { TextSearch } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
-const SearchOrder = () => {
+const SearchOrder = ({ children }: { children: React.ReactNode }) => {
   const [searchKey, setSearchKey] = React.useState("");
   const handleSearchOrder = () => {};
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <TextSearch />
-        </Button>
-      </SheetTrigger>
+      <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent>
         <SheetHeader>
           <SheetTitle className="uppercase">Tra cứu đơn hàng</SheetTitle>

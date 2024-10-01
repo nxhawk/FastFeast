@@ -34,4 +34,8 @@ export const cartReducer = {
     state.totalProduct = state.totalProduct - (filterProduct?.count || 0);
     state.products = [...filterOtherProduct];
   },
+  clearCart(state: ICart) {
+    state.totalProduct = 0;
+    state.products = [];
+  },
 };
