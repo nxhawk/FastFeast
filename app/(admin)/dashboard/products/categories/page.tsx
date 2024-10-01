@@ -8,7 +8,7 @@ import { listCategories } from "@/models/category";
 export const metadata: Metadata = {
   title: "Danh mục Sản phẩm - Fast Food Ordering website",
   description: "Fast Food Ordering website",
-  icons: "images/logo.png",
+  icons: "/images/logo.png",
 };
 
 const getCategories = unstable_cache(

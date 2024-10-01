@@ -7,7 +7,7 @@ import { getCategoryById } from "@/models/category";
 export const metadata: Metadata = {
   title: "Edit Danh mục - Fast Food Ordering website",
   description: "Fast Food Ordering website",
-  icons: "images/logo.png",
+  icons: "/images/logo.png",
 };
 
 const Page = async ({
