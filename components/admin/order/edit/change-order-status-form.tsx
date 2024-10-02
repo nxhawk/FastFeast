@@ -37,7 +37,7 @@ const orderStatus = [
   },
 ];
 
-const paymentStatus = [
+export const paymentStatus = [
   {
     key: PaymentMethod.CASH,
     name: "Chưa thanh toán",

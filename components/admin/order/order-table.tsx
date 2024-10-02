@@ -28,6 +28,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import CustomPagination from "@/components/common/pagination/custom-pagination";
+import ExportCSV from "@/components/common/button/export-csv";
+import { formateDate } from "@/utils/helper";
 
 interface Props {
   orders: Order[];
@@ -64,9 +66,35 @@ const OrderTable = ({ orders }: Props) => {
     },
   });
 
+  const convertDataToExportCSV = () => {
+    const data = [
+      {
+        id: "order_id",
+        fullName: "fullName",
+        phoneNumber: "phoneNumber",
+        createdAt: "createdAt",
+        totalPrice: "totalPrice",
+        paymentStatus: "paymentStatus",
+        orderStatus: "orderStatus",
+      },
+    ];
+    orders.forEach((order) => {
+      data.push({
+        id: order.id,
+        fullName: order.fullName,
+        phoneNumber: order.phoneNumber,
+        createdAt: formateDate(order.createdAt),
+        totalPrice: order.totalPrice.toString(),
+        paymentStatus: order.paymentMethod,
+        orderStatus: order.status,
+      });
+    });
+    return data;
+  };
+
   return (
     <div className="w-full">
-      <div className="flex items-center py-4 gap-2">
+      <div className="flex items-center justify-between py-4 gap-2">
         <div className="flex items-center gap-2">
           <Input
             placeholder="Lọc mã đơn..."
@@ -81,33 +109,37 @@ const OrderTable = ({ orders }: Props) => {
             className="max-w-sm"
           />
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto max-md:hidden">
-              <SlidersHorizontal className="mr-2 h-4 w-4" />
-              View
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Cột</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+
+        <div className="flex gap-3 items-center">
+          <ExportCSV data={convertDataToExportCSV()} fileName="Danh sách đơn hàng" />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto max-md:hidden">
+                <SlidersHorizontal className="mr-2 h-4 w-4" />
+                View
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Cột</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
