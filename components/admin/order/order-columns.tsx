@@ -10,8 +10,6 @@ import StatusOrder from "./status-order";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -20,6 +18,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { convertToVND, formateDate } from "@/utils/helper";
 import ConfirmDelete from "@/components/common/confirm-delete";
 import { Button } from "@/components/ui/button";
+import { deleteOrder } from "@/models/order";
 
 export const orderColumns: ColumnDef<Order>[] = [
   {
@@ -174,13 +173,14 @@ export const orderColumns: ColumnDef<Order>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const order = row.original;
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const router = useRouter();
       const handleDelete = async () => {
-        const id = payment.id;
+        const id = order.id;
         try {
-          toast.success("Xóa sản phẩm thành công");
+          deleteOrder(id);
+          toast.success("Xóa đơn hàng thành công");
           // reload page
           router.refresh();
         } catch (error) {
@@ -190,7 +190,7 @@ export const orderColumns: ColumnDef<Order>[] = [
 
       return (
         <div className="flex items-center gap-1">
-          <Link href={`/dashboard/orders/${payment.id}`}>
+          <Link href={`/dashboard/orders/${order.id}`}>
             <Button variant="ghost" size="icon">
               <Eye size={17} />
             </Button>
@@ -203,10 +203,6 @@ export const orderColumns: ColumnDef<Order>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id + "")}>
-                Copy ID
-              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <ConfirmDelete handleDelete={handleDelete} />
             </DropdownMenuContent>

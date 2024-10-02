@@ -30,7 +30,7 @@ const ConfirmDelete = ({ handleDelete }: Props) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Bạn có chắc chắn không?</AlertDialogTitle>
           <AlertDialogDescription>
-            Hành động này không thể được hoàn tác. Thao tác này sẽ xóa vĩnh viễn xóa dữ liệu này khỏi máy chủ.
+            Hành động này không thể được hoàn tác. Thao tác này sẽ xóa vĩnh viễn dữ liệu này khỏi máy chủ.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

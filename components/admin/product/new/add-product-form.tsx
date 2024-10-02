@@ -98,7 +98,7 @@ const AddProductForm = ({ categories, product }: Props) => {
             {product ? "Cập nhật" : "Tạo Sản Phẩm"}
           </Button>
         </div>
-        <div className="flex max-md:flex-col flex-no-wrap gap-5 w-full pt-8 ">
+        <div className="flex max-md:flex-col gap-5 w-full pt-8 ">
           <div className="w-full md:w-4/6 flex flex-col max-md:gap-4">
             <ProductInformation
               isLoading={isLoading}

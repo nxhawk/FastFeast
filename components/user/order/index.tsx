@@ -27,7 +27,7 @@ export enum EPaymentType {
   BANK = "bank",
 }
 
-const OrderSchema = yup.object().shape({
+export const OrderSchema = yup.object().shape({
   phoneNumber: yup
     .string()
     .required("Số điện thoại bắt buộc")
