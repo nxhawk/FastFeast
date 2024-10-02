@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-r
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { type TPagination } from "@/components/admin/category/category-table";
+import { type TPagination } from "@/components/admin/product/product-table";
 
 interface Props {
   pagination: TPagination;
