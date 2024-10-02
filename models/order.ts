@@ -1,6 +1,13 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { type ProductOnOrder, type Order, type Product, type Image } from "@prisma/client";
+import {
+  type ProductOnOrder,
+  type Order,
+  type Product,
+  type Image,
+  type OrderState,
+  type PaymentMethod,
+} from "@prisma/client";
 import prisma from "@/lib/prismadb";
 import { type IProductCart } from "@/lib/store/features/cart/type";
 import { type IUserOrder } from "@/components/user/order";
@@ -14,6 +21,20 @@ export type FullProductOnOrder = ProductOnOrder & {
     image: Image | null;
   };
 };
+
+export async function updateOrderStatus(id: string, orderStatus: OrderState, paymentStatus: PaymentMethod) {
+  const updateOrder = await prisma.order.update({
+    where: {
+      id,
+    },
+    data: {
+      status: orderStatus,
+      paymentMethod: paymentStatus,
+    },
+  });
+
+  return updateOrder;
+}
 
 export async function updateInfoUserOrder(id: string, user: IUserOrder) {
   const updateOrder = await prisma.order.update({

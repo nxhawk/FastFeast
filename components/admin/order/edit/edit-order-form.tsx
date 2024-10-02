@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import OrderInformation from "./order-information";
+import ChangeOrderStatusForm from "./change-order-status-form";
 import BackButton from "@/components/common/back-button";
-import { Button } from "@/components/ui/button";
 import { type FullOrder } from "@/models/order";
 
 interface Props {
@@ -18,24 +18,16 @@ const EditOrderForm = ({ order }: Props) => {
       <div>
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-medium text-gray-900 leading-8 mb-0">Đơn hàng</h1>
-          <Button
-            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-indigo-500 hover:to-blue-600 shadow whitespace-nowrap flex items-center gap-1 font-medium max-md:hidden"
-            type="submit"
-          >
-            Cập nhật
-          </Button>
         </div>
         <div className="flex max-md:flex-col gap-5 w-full pt-8">
           <div className="w-full md:w-4/6 flex flex-col max-md:gap-4">
             <OrderInformation order={order} />
-            <Button
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-indigo-500 hover:to-blue-600 shadow whitespace-nowrap flex items-center gap-1 font-medium md:hidden"
-              type="submit"
-            >
-              Cập nhật
-            </Button>
           </div>
-          <div className="w-full md:w-2/6"></div>
+          <div className="w-full md:w-2/6">
+            {order && (
+              <ChangeOrderStatusForm paymentMethod={order.paymentMethod} orderState={order.status} orderId={order.id} />
+            )}
+          </div>
         </div>
       </div>
     </div>
