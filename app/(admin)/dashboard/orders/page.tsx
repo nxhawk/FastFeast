@@ -14,7 +14,7 @@ const Page = async () => {
 
   return (
     <div className="pt-8">
-      <div className="mb-8 text-2xl font-medium text-gray-900 leading-8">Đơn hàng</div>
+      <div className="mb-3 text-2xl font-medium text-gray-900 leading-8">Đơn hàng</div>
       <OrderTable orders={orders} />
     </div>
   );

@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 "use client";
 import { type Category } from "@prisma/client";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { SlidersHorizontal, SquarePen } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import React from "react";
 import {
-  type ColumnDef,
   type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
@@ -16,105 +14,24 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+
+import { type TPagination } from "../product/product-table";
+import { categoryColumns } from "./category-columns";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import CustomPagination from "@/components/common/pagination/custom-pagination";
-import ConfirmDelete from "@/components/common/confirm-delete";
-import { deleteCategory } from "@/models/category";
 
 interface Props {
   categories: Category[];
 }
-
-export const columns: ColumnDef<Category>[] = [
-  {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Tên
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const category = row.original;
-      return <div className="px-4">{category.name}</div>;
-    },
-  },
-  {
-    accessorKey: "slug",
-    header: () => <div>Slug</div>,
-    cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue("slug")}</div>;
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const router = useRouter();
-      const handleDelete = async () => {
-        const id = payment.id;
-        try {
-          await deleteCategory(id);
-          toast.success("Xóa category thành công");
-          // reload page
-          router.refresh();
-        } catch (error) {
-          toast.error("Error");
-        }
-      };
-
-      return (
-        <div className="flex items-center gap-1">
-          <Link href={`/dashboard/products/categories/${payment.id}`}>
-            <Button variant="ghost" size="icon">
-              <SquarePen size={17} />
-            </Button>
-          </Link>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <DotsHorizontalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id + "")}>
-                Copy ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <ConfirmDelete handleDelete={handleDelete} />
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
-    },
-  },
-];
-
-export type TPagination = {
-  pageIndex: number;
-  pageSize: number;
-};
 
 const CategoryTable = ({ categories }: Props) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -128,7 +45,7 @@ const CategoryTable = ({ categories }: Props) => {
 
   const table = useReactTable({
     data: categories,
-    columns,
+    columns: categoryColumns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -210,7 +127,7 @@ const CategoryTable = ({ categories }: Props) => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell colSpan={categoryColumns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>
