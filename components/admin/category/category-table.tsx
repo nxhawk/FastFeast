@@ -19,6 +19,7 @@ import {
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -82,13 +83,12 @@ export const columns: ColumnDef<Category>[] = [
 
       return (
         <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => router.push(`/dashboard/products/categories/${payment.id}`)}
-          >
-            <SquarePen size={17} />
-          </Button>
+          <Link href={`/dashboard/products/categories/${payment.id}`}>
+            <Button variant="ghost" size="icon">
+              <SquarePen size={17} />
+            </Button>
+          </Link>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">

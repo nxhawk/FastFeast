@@ -8,7 +8,7 @@ import { listCategories } from "@/models/category";
 export const metadata: Metadata = {
   title: "Danh sách sản phẩm - Fast Food Ordering website",
   description: "Fast Food Ordering website",
-  icons: "images/logo.png",
+  icons: "/images/logo.png",
 };
 
 const Page = async ({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) => {

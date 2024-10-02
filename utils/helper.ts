@@ -1,5 +1,40 @@
-import { Status } from "@prisma/client";
+import { OrderState, Status } from "@prisma/client";
 import moment from "moment";
+
+export function convertOrderStatusToInfo(state: OrderState) {
+  switch (state) {
+    case OrderState.NEW_ORDER:
+      return {
+        name: "Đơn hàng mới",
+        className: "bg-blue-500 text-white",
+      };
+    case OrderState.CONFIRMED:
+      return {
+        name: "Đã xác nhận",
+        className: "border border-orange-200 bg-orange-50 text-orange-600",
+      };
+    case OrderState.PROCESSING:
+      return {
+        name: "Đang chế biến",
+        className: "border border-orange-200 bg-orange-50 text-orange-600",
+      };
+    case OrderState.DELIVERING:
+      return {
+        name: "Đang  giao hàng",
+        className: "border border-orange-200 bg-orange-50 text-orange-600",
+      };
+    case OrderState.COMPLETED:
+      return {
+        name: "Hoàn tất",
+        className: "bg-green-500 text-white",
+      };
+    default:
+      return {
+        name: "Đơn hủy",
+        className: "bg-red-500 text-white",
+      };
+  }
+}
 
 export const vietnamPhoneNumberRegex = /^(0)(3|5|7|8|9)([0-9]{8})$/;
 
