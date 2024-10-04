@@ -8,6 +8,7 @@ import {
   type OrderState,
   type PaymentMethod,
 } from "@prisma/client";
+import { endOfDay, startOfDay } from "date-fns";
 import prisma from "@/lib/prismadb";
 import { type IProductCart } from "@/lib/store/features/cart/type";
 import { type IUserOrder } from "@/components/user/order";
@@ -70,7 +71,22 @@ export async function getOrderById(id: string) {
   return order;
 }
 
-export async function getAllOrder() {
+export async function getAllOrder(fromDay?: string, toDay?: string) {
+  if (fromDay && toDay) {
+    const orders = await prisma.order.findMany({
+      where: {
+        createdAt: {
+          gte: startOfDay(new Date(fromDay)),
+          lte: endOfDay(new Date(toDay)),
+        },
+      },
+      include: {
+        items: true,
+      },
+    });
+
+    return orders;
+  }
   const orders = await prisma.order.findMany({
     include: {
       items: true,

@@ -66,6 +66,10 @@ export function formateDate(date: string | number | Date | undefined) {
   return moment(date).format("HH:mm:ss DD/MM/YYYY");
 }
 
+export function formateDateSearchParam(date: string | number | Date | undefined) {
+  return moment(date).format("YYYY-MM-DD");
+}
+
 export function convertToVND(money: number) {
   return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(money);
 }

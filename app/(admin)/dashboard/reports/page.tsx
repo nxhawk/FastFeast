@@ -17,7 +17,9 @@ const Page = async ({
   params: { id: string };
   searchParams?: Record<string, string | string[] | undefined>;
 }) => {
-  const orders = await getAllOrder();
+  const fromDay = searchParams?.from ? decodeURI(searchParams?.from as string) : "";
+  const toDay = searchParams?.to ? decodeURI(searchParams?.to as string) : "";
+  const orders = await getAllOrder(fromDay, toDay);
 
   return (
     <div className="pt-8">

@@ -1,5 +1,5 @@
 "use client";
-
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
@@ -10,8 +10,13 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { formateDateSearchParam } from "@/utils/helper";
 
 export function SelectDate({ className }: React.HTMLAttributes<HTMLDivElement>) {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [quickButtonSelected, setQuickButtonSelected] = React.useState("");
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(),
@@ -20,6 +25,15 @@ export function SelectDate({ className }: React.HTMLAttributes<HTMLDivElement>) 
 
   const handleChangeDate = (e: DateRange | undefined) => {
     setDate(e);
+    const params = new URLSearchParams(searchParams);
+    if (e?.from && e?.to) {
+      params.set("from", formateDateSearchParam(e.from));
+      params.set("to", formateDateSearchParam(e.to));
+    } else {
+      params.delete("from");
+      params.delete("to");
+    }
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
