@@ -16,6 +16,7 @@ import {
 import { type Order } from "@prisma/client";
 import { type TPagination } from "../product/product-table";
 
+import ListBoxStatistic1 from "../statistic/list-box-statistic-1";
 import { orderColumns } from "./order-columns";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,9 +34,10 @@ import { formateDate } from "@/utils/helper";
 
 interface Props {
   orders: Order[];
+  showStatistics?: boolean;
 }
 
-const OrderTable = ({ orders }: Props) => {
+const OrderTable = ({ orders, showStatistics = false }: Props) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -91,10 +93,14 @@ const OrderTable = ({ orders }: Props) => {
     });
     return data;
   };
-  // console.log(table.getRowModel().rowsById[3].original.totalPrice);
 
   return (
     <div className="w-full">
+      {showStatistics && (
+        <div className="my-6">
+          <ListBoxStatistic1 table={table} />
+        </div>
+      )}
       <div className="flex items-center justify-between py-4 gap-2">
         <div className="flex items-center gap-2">
           <Input
