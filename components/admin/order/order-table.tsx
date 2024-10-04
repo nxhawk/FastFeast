@@ -91,6 +91,7 @@ const OrderTable = ({ orders }: Props) => {
     });
     return data;
   };
+  // console.log(table.getRowModel().rowsById[3].original.totalPrice);
 
   return (
     <div className="w-full">

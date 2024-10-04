@@ -114,7 +114,7 @@ export const orderColumns: ColumnDef<Order>[] = [
     },
   },
   {
-    accessorKey: "Tổng tiền",
+    accessorKey: "price",
     sortingFn: (rowA, rowB) => rowA.original.totalPrice - rowB.original.totalPrice,
     header: ({ column }) => {
       return (
