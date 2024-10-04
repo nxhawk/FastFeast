@@ -8,7 +8,7 @@ import {
   type OrderState,
   type PaymentMethod,
 } from "@prisma/client";
-import { endOfDay, startOfDay } from "date-fns";
+import { endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek } from "date-fns";
 import prisma from "@/lib/prismadb";
 import { type IProductCart } from "@/lib/store/features/cart/type";
 import { type IUserOrder } from "@/components/user/order";
@@ -22,6 +22,54 @@ export type FullProductOnOrder = ProductOnOrder & {
     image: Image | null;
   };
 };
+
+async function calculateSumCountOrder(from: Date, to: Date) {
+  const day = await prisma.order.aggregate({
+    where: {
+      createdAt: {
+        gte: startOfDay(from),
+        lte: endOfDay(to),
+      },
+    },
+    _sum: {
+      totalPrice: true,
+    },
+    _count: {
+      id: true,
+    },
+  });
+  return day;
+}
+
+export async function getStatisticsDashboard() {
+  // calculate today
+  const today = await calculateSumCountOrder(new Date(), new Date());
+  // calculate this week
+  const week = await calculateSumCountOrder(
+    startOfWeek(new Date(), { weekStartsOn: 1 }),
+    endOfWeek(new Date(), { weekStartsOn: 1 }),
+  );
+  // calculate this month
+  const month = await calculateSumCountOrder(startOfMonth(new Date()), endOfMonth(new Date()));
+
+  return [
+    {
+      title: "Hôm nay",
+      total: today._sum.totalPrice,
+      quantity: today._count.id,
+    },
+    {
+      title: "Tuần này",
+      total: week._sum.totalPrice,
+      quantity: week._count.id,
+    },
+    {
+      title: "Tháng này",
+      total: month._sum.totalPrice,
+      quantity: month._count.id,
+    },
+  ];
+}
 
 export async function updateOrderStatus(id: string, orderStatus: OrderState, paymentStatus: PaymentMethod) {
   const updateOrder = await prisma.order.update({

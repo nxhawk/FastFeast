@@ -35,9 +35,10 @@ import { formateDate } from "@/utils/helper";
 interface Props {
   orders: Order[];
   showStatistics?: boolean;
+  showOptions?: boolean;
 }
 
-const OrderTable = ({ orders, showStatistics = false }: Props) => {
+const OrderTable = ({ orders, showStatistics = false, showOptions = true }: Props) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -96,58 +97,56 @@ const OrderTable = ({ orders, showStatistics = false }: Props) => {
 
   return (
     <div className="w-full">
-      {showStatistics && (
-        <div className="my-6">
-          <ListBoxStatistic1 table={table} />
+      <div className="my-6">{showStatistics && showOptions && <ListBoxStatistic1 table={table} />}</div>
+      {showOptions && (
+        <div className="flex items-center justify-between py-4 gap-2">
+          <div className="flex items-center gap-2">
+            <Input
+              placeholder="Lọc mã đơn..."
+              value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
+              onChange={(event) => table.getColumn("id")?.setFilterValue(event.target.value)}
+              className="max-w-sm py-1"
+            />
+            <Input
+              placeholder="Lọc số điện thoại..."
+              value={(table.getColumn("contact")?.getFilterValue() as string) ?? ""}
+              onChange={(event) => table.getColumn("contact")?.setFilterValue(event.target.value)}
+              className="max-w-sm"
+            />
+          </div>
+
+          <div className="flex gap-3 items-center">
+            <ExportCSV data={convertDataToExportCSV()} fileName="Danh sách đơn hàng" />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="ml-auto max-md:hidden">
+                  <SlidersHorizontal className="mr-2 h-4 w-4" />
+                  View
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Cột</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       )}
-      <div className="flex items-center justify-between py-4 gap-2">
-        <div className="flex items-center gap-2">
-          <Input
-            placeholder="Lọc mã đơn..."
-            value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
-            onChange={(event) => table.getColumn("id")?.setFilterValue(event.target.value)}
-            className="max-w-sm py-1"
-          />
-          <Input
-            placeholder="Lọc số điện thoại..."
-            value={(table.getColumn("contact")?.getFilterValue() as string) ?? ""}
-            onChange={(event) => table.getColumn("contact")?.setFilterValue(event.target.value)}
-            className="max-w-sm"
-          />
-        </div>
-
-        <div className="flex gap-3 items-center">
-          <ExportCSV data={convertDataToExportCSV()} fileName="Danh sách đơn hàng" />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto max-md:hidden">
-                <SlidersHorizontal className="mr-2 h-4 w-4" />
-                View
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Cột</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -182,19 +181,21 @@ const OrderTable = ({ orders, showStatistics = false }: Props) => {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4 max-md:flex-col-reverse gap-5">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-          selected.
+      {showOptions && (
+        <div className="flex items-center justify-end space-x-2 py-4 max-md:flex-col-reverse gap-5">
+          <div className="flex-1 text-sm text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
+            selected.
+          </div>
+          <div className="space-x-2">
+            <CustomPagination
+              pagination={pagination}
+              setPagination={setPagination}
+              totalItem={table.getFilteredRowModel().rows.length}
+            />
+          </div>
         </div>
-        <div className="space-x-2">
-          <CustomPagination
-            pagination={pagination}
-            setPagination={setPagination}
-            totalItem={table.getFilteredRowModel().rows.length}
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 };
