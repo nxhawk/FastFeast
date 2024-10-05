@@ -36,7 +36,7 @@ const SearchOrder = ({ children }: { children: React.ReactNode }) => {
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="p-0">
-        <div className="flex flex-col max-h-screen min-h-screen">
+        <div className="flex flex-col max-h-dvh min-h-dvh">
           <div className="p-2 border-b shadow">
             <div className="uppercase font-bold">Tra cứu đơn hàng</div>
           </div>
@@ -61,12 +61,14 @@ const SearchOrder = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
           )}
-          <div className="p-2 pt-0">
-            <div className="bg-emerald-500/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-emerald-500">
-              <CircleCheck className="w-4 h-4" />
-              Đã tìm thấy {ordersResults.length} đơn hàng với "{storeSearchKey}"
+          {!isFirst && (
+            <div className="p-2 pt-0">
+              <div className="bg-emerald-500/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-emerald-500">
+                <CircleCheck className="w-4 h-4" />
+                Đã tìm thấy {ordersResults.length} đơn hàng với "{storeSearchKey}"
+              </div>
             </div>
-          </div>
+          )}
           <div
             className={cn("space-y-3 flex-1 overflow-y-scroll p-2 pt-0 mb-2", isLoading && "opacity-50")}
             id="style-2"
