@@ -1,12 +1,12 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import {
+  PaymentMethod,
   type ProductOnOrder,
   type Order,
   type Product,
   type Image,
   type OrderState,
-  type PaymentMethod,
 } from "@prisma/client";
 import { endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek } from "date-fns";
 import prisma from "@/lib/prismadb";
@@ -30,6 +30,7 @@ async function calculateSumCountOrder(from: Date, to: Date) {
         gte: startOfDay(from),
         lte: endOfDay(to),
       },
+      paymentMethod: PaymentMethod.BANK,
     },
     _sum: {
       totalPrice: true,
@@ -98,6 +99,61 @@ export async function updateInfoUserOrder(id: string, user: IUserOrder) {
   return updateOrder;
 }
 
+export async function getAllOrderById(id: string) {
+  let orders: FullOrder[] = [];
+  try {
+    orders = await prisma.order.findMany({
+      where: {
+        id,
+      },
+      include: {
+        items: {
+          include: {
+            product: {
+              include: {
+                image: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+      ],
+    });
+  } catch (error) {
+    try {
+      orders = await prisma.order.findMany({
+        where: {
+          phoneNumber: id,
+        },
+        include: {
+          items: {
+            include: {
+              product: {
+                include: {
+                  image: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+      });
+    } catch (error) {
+      orders = [];
+    }
+  }
+
+  return orders;
+}
+
 export async function getOrderById(id: string) {
   const order = await prisma.order.findUnique({
     where: {
@@ -128,6 +184,11 @@ export async function getAllOrder(fromDay?: string, toDay?: string) {
           lte: endOfDay(new Date(toDay)),
         },
       },
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+      ],
       include: {
         items: true,
       },
@@ -136,6 +197,11 @@ export async function getAllOrder(fromDay?: string, toDay?: string) {
     return orders;
   }
   const orders = await prisma.order.findMany({
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+    ],
     include: {
       items: true,
     },
