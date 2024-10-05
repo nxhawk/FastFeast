@@ -35,7 +35,7 @@ const Cart = () => {
           </div>
         </Button>
       </SheetTrigger>
-      <SheetContent className="p-0">
+      <SheetContent className="p-0 max-md:w-full">
         <div className="flex flex-col max-h-dvh min-h-dvh">
           <div className="p-2 border-b shadow">
             <div className="uppercase font-bold">Giỏ hàng</div>
