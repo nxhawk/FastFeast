@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { type FullOrder, getAllOrderById } from "@/models/order";
+import { cn } from "@/lib/utils";
 
 const SearchOrder = ({ children }: { children: React.ReactNode }) => {
   const [searchKey, setSearchKey] = React.useState("");
@@ -66,7 +67,10 @@ const SearchOrder = ({ children }: { children: React.ReactNode }) => {
               Đã tìm thấy {ordersResults.length} đơn hàng với "{storeSearchKey}"
             </div>
           </div>
-          <div className="space-y-3 flex-1 overflow-y-scroll p-2 pt-0 mb-2" id="style-2">
+          <div
+            className={cn("space-y-3 flex-1 overflow-y-scroll p-2 pt-0 mb-2", isLoading && "opacity-50")}
+            id="style-2"
+          >
             {ordersResults.map((order) => (
               <OrderBox key={order.id} order={order} />
             ))}
