@@ -29,24 +29,24 @@ const AdminMenuDropdown = () => {
           <DropdownMenuLabel>Menu</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <Link href={"/dashboard"} className="flex gap-2 items-center w-full">
+            <Link href={"/dashboard"}>
+              <DropdownMenuItem className="flex gap-2 items-center w-full cursor-pointer">
                 <Gauge size="17" />
                 Dashboard
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href={"/dashboard"} className="flex gap-2 items-center w-full">
+              </DropdownMenuItem>
+            </Link>
+            <Link href={"/dashboard/orders"}>
+              <DropdownMenuItem className="cursor-pointer flex gap-2 items-center w-full">
                 <LayoutList size="17" />
                 Đơn hàng
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href={"/dashboard"} className="flex gap-2 items-center w-full">
+              </DropdownMenuItem>
+            </Link>
+            <Link href={"/dashboard/reports"}>
+              <DropdownMenuItem className="flex gap-2 items-center w-full cursor-pointer">
                 <LayoutList size="17" />
                 Báo cáo
-              </Link>
-            </DropdownMenuItem>
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <div className="flex gap-2 items-center w-full">
@@ -56,24 +56,24 @@ const AdminMenuDropdown = () => {
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
-                  <DropdownMenuItem>
-                    <Link href={"/dashboard/products"}>Danh sách</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href={"/dashboard/products/categories"}>Categories</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href={"/dashboard/products/tags"}>Tags</Link>
-                  </DropdownMenuItem>
+                  <Link href={"/dashboard/products"}>
+                    <DropdownMenuItem className="cursor-pointer">Danh sách</DropdownMenuItem>
+                  </Link>
+                  <Link href={"/dashboard/products/categories"}>
+                    <DropdownMenuItem className="cursor-pointer">Categories</DropdownMenuItem>
+                  </Link>
+                  <Link href={"/dashboard/products/tags"}>
+                    <DropdownMenuItem className="cursor-pointer">Tags</DropdownMenuItem>
+                  </Link>
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>
-            <DropdownMenuItem>
-              <Link href={"/dashboard"} className="flex gap-2 items-center w-full">
+            <Link href={"/dashboard"}>
+              <DropdownMenuItem className="flex gap-2 items-center w-full cursor-pointer">
                 <UsersRound size="17" />
                 Người dùng
-              </Link>
-            </DropdownMenuItem>
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
