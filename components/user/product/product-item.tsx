@@ -37,7 +37,7 @@ const ProductItem = ({ product }: Props) => {
     <Card className="w-full overflow-clip rounded-md">
       <CardContent className="p-2 relative">
         {outStock && (
-          <div className="z-10 absolute top-0 right-0 rounded-bl-lg text-xs p-0.5 px-2.5 bg-red-600 text-white w-fit">
+          <div className="z-2 absolute top-0 right-0 rounded-bl-lg text-xs p-0.5 px-2.5 bg-red-600 text-white w-fit">
             Hết hàng
           </div>
         )}
